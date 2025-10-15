@@ -3,405 +3,683 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>TEST Interactivos: Fibromialgia (2016) y Artritis Reumatoide (ACR/EULAR 2010)</title>
+<title>Suite Clínica Interactiva: Reumatología, Gastroenterología y Salud Mental</title>
 <style>
   :root{
-    --bg:#0f172a; /* slate-900 */
-    --panel:#111827; /* gray-900 */
-    --card:#0b1220; /* darker */
-    --text:#e5e7eb; /* gray-200 */
-    --muted:#94a3b8; /* slate-400 */
-    --accent:#38bdf8; /* sky-400 */
-    --accent-2:#22c55e; /* green-500 */
-    --accent-3:#f59e0b; /* amber-500 */
-    --danger:#ef4444; /* red-500 */
+    --bg:#0f172a; --card:#0b1220; --text:#e5e7eb; --muted:#94a3b8; --accent:#38bdf8; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444;
   }
-  html,body{height:100%;}
-  body{margin:0;background:linear-gradient(180deg,var(--bg),#0b1020);color:var(--text);font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"}
-  .wrap{max-width:1100px;margin:0 auto;padding:24px}
+  html,body{height:100%}
+  body{margin:0;background:linear-gradient(180deg,var(--bg),#0b1020);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Helvetica,Arial}
+  .wrap{max-width:1200px;margin:0 auto;padding:24px}
   header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
-  .title{font-size:1.4rem;font-weight:700;letter-spacing:.3px}
-  .tabs{display:flex;gap:8px;flex-wrap:wrap}
-  .tab{border:1px solid #1f2937;background:#0b1220;border-radius:999px;padding:8px 14px;color:var(--muted);cursor:pointer;user-select:none}
-  .tab.active{color:#0b1220;background:var(--accent);border-color:var(--accent)}
+  .title{font-size:1.25rem;font-weight:700}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .tab{border:1px solid #1f2937;background:#0b1220;border-radius:999px;padding:8px 14px;color:var(--muted);cursor:pointer}
+  .tab.active{color:#0b1220;background:var(--accent);border-color:transparent}
+  .subtabs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 14px}
+  .subtab{border:1px dashed #334155;background:transparent;border-radius:999px;padding:6px 10px;color:var(--muted);cursor:pointer}
+  .subtab.active{color:#0b1220;background:var(--accent);border-color:transparent}
   .grid{display:grid;grid-template-columns:1fr;gap:16px}
-  @media(min-width:980px){.grid{grid-template-columns:1.1fr .9fr}}
-  .card{background:linear-gradient(180deg,#0b1220,#0a0f1a);border:1px solid #1f2937;border-radius:14px;padding:18px}
-  h2{font-size:1.1rem;margin:0 0 8px}
-  h3{font-size:1rem;margin:16px 0 8px;color:var(--muted)}
-  .section-help{font-size:.9rem;color:var(--muted)}
+  @media(min-width:980px){.grid{grid-template-columns:1.05fr .95fr}}
+  .card{position:relative;background:linear-gradient(180deg,#0b1220,#0a0f1a);border:1px solid #1f2937;border-radius:14px;padding:18px}
+  h2{font-size:1.05rem;margin:0 0 8px}
+  h3{font-size:1rem;margin:14px 0 8px;color:var(--muted)}
   .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .cols-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
   .item{border:1px solid #223049;border-radius:10px;padding:10px}
   .item label{display:flex;gap:8px;align-items:center}
-  .score{font-size:2rem;font-weight:800}
+  .score{font-size:1.6rem;font-weight:800}
   .badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:.8rem;border:1px solid #1f2937}
   .ok{background:rgba(34,197,94,.15);color:#86efac;border-color:#14532d}
   .warn{background:rgba(245,158,11,.15);color:#fcd34d;border-color:#78350f}
   .bad{background:rgba(239,68,68,.15);color:#fecaca;border-color:#7f1d1d}
   .btn{appearance:none;border:1px solid #1f2937;background:#0b1220;color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer}
   .btn:hover{border-color:#334155}
-  .btn-accent{background:var(--accent);color:#0b1220;border-color:transparent}
   .muted{color:var(--muted)}
-  .foot{margin-top:24px;font-size:.9rem;color:var(--muted)}
-  details summary{cursor:pointer;color:var(--accent)}
   .divider{height:1px;background:#1f2937;margin:12px 0}
-  .legend{font-size:.9rem;color:var(--muted)}
-  .pill{display:inline-block;border:1px dashed #334155;border-radius:999px;padding:4px 8px;margin:2px}
   .list{margin:8px 0;padding-left:18px}
+  .radio-row{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+  .radio-row label{border:1px solid #334155;border-radius:8px;padding:6px 10px;cursor:pointer}
+  .radio-row input{accent-color:#38bdf8}
+  /* Help UI */
+  .help-btn{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:999px;border:1px solid #334155;background:#0b1220;color:var(--muted);cursor:pointer;font-weight:700}
+  .help-btn:hover{border-color:#475569;color:#fff}
+  .help-pop{position:absolute;top:40px;right:10px;max-width:420px;background:#0b1220;border:1px solid #334155;border-radius:10px;padding:10px;box-shadow:0 10px 30px rgba(0,0,0,.4);display:none;z-index:10}
+  .help-pop.visible{display:block}
+  .help-pop h4{margin:0 0 6px;font-size:.95rem;color:var(--accent)}
+  .help-pop p{margin:0;font-size:.9rem;color:var(--muted)}
+  footer{margin-top:20px;color:var(--muted);font-size:.92rem}
 </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <div class="title">TEST interactivos para consulta general: Fibromialgia (2016) y Artritis Reumatoide (ACR/EULAR 2010)</div>
+      <div class="title">Suite clínica interactiva: Reumatología, Gastroenterología y Salud Mental</div>
       <div>
         <button class="btn" onclick="window.print()">Imprimir</button>
       </div>
     </header>
 
-    <nav class="tabs" role="tablist" aria-label="Selector de test">
-      <button class="tab active" id="tab-fm" onclick="showTab('fm')">Fibromialgia 2016</button>
-      <button class="tab" id="tab-ra" onclick="showTab('ra')">AR ACR/EULAR 2010</button>
+    <nav class="tabs" role="tablist" aria-label="Áreas clínicas">
+      <button class="tab active" id="tab-reuma" onclick="showTab('reuma')">Reumatología</button>
+      <button class="tab" id="tab-gi" onclick="showTab('gi')">Gastroenterología</button>
+      <button class="tab" id="tab-sm" onclick="showTab('sm')">Salud Mental</button>
     </nav>
 
-    <!-- Fibromialgia -->
-    <section id="fm" class="tab-panel" aria-labelledby="tab-fm">
+    <!-- REUMATOLOGÍA -->
+    <section id="reuma" class="tab-panel">
+      <div class="subtabs">
+        <button class="subtab active" id="sub-fm" onclick="showSub('fm')">Fibromialgia 2016</button>
+        <button class="subtab" id="sub-ra" onclick="showSub('ra')">AR ACR/EULAR 2010</button>
+      </div>
+
+      <!-- Fibromialgia -->
+      <div id="panel-fm">
+        <div class="grid">
+          <div class="card">
+            <h2>1) WPI: Índice de dolor generalizado (0–19) — última semana</h2>
+            <button class="help-btn" data-help="help-wpi">?</button>
+            <div class="help-pop" id="help-wpi">
+              <h4>Cómo usar WPI</h4>
+              <p>Marque cada zona con dolor durante la última semana. Suma de 0 a 19. Para "dolor generalizado" se requieren ≥4 de 5 regiones con dolor. Pecho y abdomen no cuentan para esa regla.</p>
+            </div>
+
+            <h3>Axial</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" data-wpi data-region="axial" /> Cuello</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="axial" /> Espalda alta</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="axial" /> Espalda baja</label>
+              <label class="item"><input type="checkbox" data-wpi data-omit-region="true" /> Pecho</label>
+              <label class="item"><input type="checkbox" data-wpi data-omit-region="true" /> Abdomen</label>
+            </div>
+
+            <h3>Superior izquierda</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" data-wpi data-region="Lsup" /> Mandíbula izq.</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Lsup" /> Cintura escapular izq.</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Lsup" /> Brazo izq. proximal</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Lsup" /> Antebrazo izq.</label>
+            </div>
+
+            <h3>Superior derecha</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" data-wpi data-region="Rsup" /> Mandíbula der.</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Rsup" /> Cintura escapular der.</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Rsup" /> Brazo der. proximal</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Rsup" /> Antebrazo der.</label>
+            </div>
+
+            <h3>Inferior izquierda</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" data-wpi data-region="Linf" /> Cadera/glúteo izq.</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Linf" /> Muslo izq.</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Linf" /> Pierna izq.</label>
+            </div>
+
+            <h3>Inferior derecha</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" data-wpi data-region="Rinf" /> Cadera/glúteo der.</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Rinf" /> Muslo der.</label>
+              <label class="item"><input type="checkbox" data-wpi data-region="Rinf" /> Pierna der.</label>
+            </div>
+
+            <div class="divider"></div>
+            <div class="muted">WPI = número de sitios con dolor (0–19). Dolor generalizado: ≥4/5 regiones con dolor.</div>
+          </div>
+
+          <div class="card">
+            <h2>2) SSS: Severidad de síntomas (0–12)</h2>
+            <button class="help-btn" data-help="help-sss">?</button>
+            <div class="help-pop" id="help-sss">
+              <h4>Cómo usar SSS</h4>
+              <p>Asigne un puntaje exacto a cada dominio: 0 = ausente, 1 = leve, 2 = moderado, 3 = severo. Seleccione el número explícito para evitar ambigüedad.</p>
+            </div>
+
+            <div class="cols">
+              <div class="item">
+                <label><strong>Fatiga</strong></label>
+                <div class="radio-row">
+                  <label><input type="radio" name="sss-fatiga" value="0" checked> 0</label>
+                  <label><input type="radio" name="sss-fatiga" value="1"> 1</label>
+                  <label><input type="radio" name="sss-fatiga" value="2"> 2</label>
+                  <label><input type="radio" name="sss-fatiga" value="3"> 3</label>
+                </div>
+              </div>
+              <div class="item">
+                <label><strong>Despertar no reparador</strong></label>
+                <div class="radio-row">
+                  <label><input type="radio" name="sss-sueño" value="0" checked> 0</label>
+                  <label><input type="radio" name="sss-sueño" value="1"> 1</label>
+                  <label><input type="radio" name="sss-sueño" value="2"> 2</label>
+                  <label><input type="radio" name="sss-sueño" value="3"> 3</label>
+                </div>
+              </div>
+              <div class="item">
+                <label><strong>Síntomas cognitivos</strong></label>
+                <div class="radio-row">
+                  <label><input type="radio" name="sss-cognitivo" value="0" checked> 0</label>
+                  <label><input type="radio" name="sss-cognitivo" value="1"> 1</label>
+                  <label><input type="radio" name="sss-cognitivo" value="2"> 2</label>
+                  <label><input type="radio" name="sss-cognitivo" value="3"> 3</label>
+                </div>
+              </div>
+            </div>
+
+            <h3>Síntomas acompañantes</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" data-sss-extra /> Cefalea</label>
+              <label class="item"><input type="checkbox" data-sss-extra /> Dolor/cólicos en hipogastrio</label>
+              <label class="item"><input type="checkbox" data-sss-extra /> Ánimo deprimido</label>
+            </div>
+
+            <h3>Duración</h3>
+            <div class="item">
+              <label><input type="checkbox" id="fm-3m" /> Síntomas ≥ 3 meses</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top:16px">
+          <div class="card">
+            <h2>Resultado Fibromialgia</h2>
+            <button class="help-btn" data-help="help-fm-crit">?</button>
+            <div class="help-pop" id="help-fm-crit">
+              <h4>Regla de 2016</h4>
+              <p>WPI ≥7 y SSS ≥5, o WPI 4–6 y SSS ≥9; más dolor generalizado en ≥4/5 regiones y duración ≥3 meses.</p>
+            </div>
+            <div class="cols-3">
+              <div><div class="muted">WPI</div><div class="score" id="fm-wpi">0</div></div>
+              <div><div class="muted">SSS</div><div class="score" id="fm-sss">0</div></div>
+              <div><div class="muted">Regiones con dolor</div><div class="score" id="fm-reg">0/5</div></div>
+            </div>
+            <div style="margin-top:8px"><span id="fm-criteria" class="badge warn">Criterios incompletos</span> <span id="fm-prob" class="badge"></span></div>
+            <div class="divider"></div>
+            <div id="fm-explain" class="muted"></div>
+          </div>
+          <div class="card">
+            <h2>Conducta sugerida</h2>
+            <ul class="list" id="fm-manejo"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- AR ACR/EULAR 2010 -->
+      <div id="panel-ra" hidden>
+        <div class="grid">
+          <div class="card">
+            <h2>Puntaje por categorías A–D</h2>
+            <button class="help-btn" data-help="help-ra">?</button>
+            <div class="help-pop" id="help-ra"><h4>Cómo usar ACR/EULAR 2010</h4><p>Clasifique cada dominio con la mejor evidencia disponible. Sume A–D. Un total ≥6/10 clasifica AR; confirme clínicamente.</p></div>
+
+            <h3>A. Compromiso articular</h3>
+            <div class="cols">
+              <label class="item"><input type="radio" name="ra-A" value="0" checked> 1 articulación grande (0)</label>
+              <label class="item"><input type="radio" name="ra-A" value="1"> 2–10 grandes (1)</label>
+              <label class="item"><input type="radio" name="ra-A" value="2"> 1–3 pequeñas ± grandes (2)</label>
+              <label class="item"><input type="radio" name="ra-A" value="3"> 4–10 pequeñas ± grandes (3)</label>
+              <label class="item"><input type="radio" name="ra-A" value="5"> &gt;10 articulaciones (≥1 pequeña) (5)</label>
+            </div>
+
+            <h3>B. Serología (RF/ACPA)</h3>
+            <div class="cols">
+              <label class="item"><input type="radio" name="ra-B" value="0" checked> RF− y ACPA− (0)</label>
+              <label class="item"><input type="radio" name="ra-B" value="2"> RF+ o ACPA+ bajo título (2)</label>
+              <label class="item"><input type="radio" name="ra-B" value="3"> RF+ o ACPA+ alto título (3)</label>
+            </div>
+
+            <h3>C. Reactantes de fase aguda</h3>
+            <div class="cols">
+              <label class="item"><input type="radio" name="ra-C" value="0" checked> PCR y VSG normales (0)</label>
+              <label class="item"><input type="radio" name="ra-C" value="1"> PCR o VSG anormal (1)</label>
+            </div>
+
+            <h3>D. Duración de síntomas</h3>
+            <div class="cols">
+              <label class="item"><input type="radio" name="ra-D" value="0" checked> &lt; 6 semanas (0)</label>
+              <label class="item"><input type="radio" name="ra-D" value="1"> ≥ 6 semanas (1)</label>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Resultado AR</h2>
+            <div class="cols-3">
+              <div><div class="muted">Puntaje total</div><div class="score" id="ra-total">0</div></div>
+              <div><div class="muted">Clasificación</div><div class="score" id="ra-clas">No cumple</div></div>
+              <div><div class="muted">Probabilidad</div><div class="score" id="ra-prob">Baja</div></div>
+            </div>
+            <div class="divider"></div>
+            <div id="ra-explain" class="muted"></div>
+          </div>
+
+          <div class="card">
+            <h2>Conducta sugerida</h2>
+            <ul class="list" id="ra-manejo"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GASTROENTEROLOGÍA -->
+    <section id="gi" class="tab-panel" hidden>
       <div class="grid">
         <div class="card">
-          <h2>1) WPI: Índice de dolor generalizado (0–19) — última semana</h2>
-          <p class="section-help">Seleccione las zonas con dolor. Se suman hasta 19 sitios. Para <strong>dolor generalizado</strong>, se contabilizan regiones anatómicas: superior izquierda, superior derecha, inferior izquierda, inferior derecha y axial. <span class="muted">Nota: pecho y abdomen no cuentan para “dolor generalizado” pero sí para WPI.</span></p>
+          <h2>ROMA IV: Síndrome de Intestino Irritable (SII)</h2>
+          <button class="help-btn" data-help="help-roma">?</button>
+          <div class="help-pop" id="help-roma">
+            <h4>Cómo usar ROMA IV</h4>
+            <p>Dolor abdominal recurrente ≥1 día/semana en los últimos 3 meses, con ≥2: relación con defecación, cambio en frecuencia o forma de heces; inicio ≥6 meses.</p>
+          </div>
 
-          <h3>Axial</h3>
+          <div class="item"><label>Dolor abdominal recurrente ≥1 día/semana últimos 3 meses <input type="checkbox" id="ibs-pain"></label></div>
+          <h3>Asociado a (marque los presentes)</h3>
           <div class="cols">
-            <label class="item"><input type="checkbox" data-wpi data-region="axial" /> Cuello</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="axial" /> Espalda alta</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="axial" /> Espalda baja</label>
-            <label class="item"><input type="checkbox" data-wpi data-omit-region="true" /> Pecho</label>
-            <label class="item"><input type="checkbox" data-wpi data-omit-region="true" /> Abdomen</label>
+            <label class="item"><input type="checkbox" class="ibs-assoc"> Relación con defecación</label>
+            <label class="item"><input type="checkbox" class="ibs-assoc"> Cambio en frecuencia de deposiciones</label>
+            <label class="item"><input type="checkbox" class="ibs-assoc"> Cambio en forma de las heces</label>
           </div>
-
-          <h3>Superior izquierda</h3>
-          <div class="cols">
-            <label class="item"><input type="checkbox" data-wpi data-region="Lsup" /> Mandíbula izq.</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Lsup" /> Cintura escapular izq.</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Lsup" /> Brazo izq. proximal</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Lsup" /> Antebrazo izq.</label>
-          </div>
-
-          <h3>Superior derecha</h3>
-          <div class="cols">
-            <label class="item"><input type="checkbox" data-wpi data-region="Rsup" /> Mandíbula der.</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Rsup" /> Cintura escapular der.</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Rsup" /> Brazo der. proximal</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Rsup" /> Antebrazo der.</label>
-          </div>
-
-          <h3>Inferior izquierda</h3>
-          <div class="cols">
-            <label class="item"><input type="checkbox" data-wpi data-region="Linf" /> Cadera/glúteo izq.</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Linf" /> Muslo izq.</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Linf" /> Pierna izq.</label>
-          </div>
-
-          <h3>Inferior derecha</h3>
-          <div class="cols">
-            <label class="item"><input type="checkbox" data-wpi data-region="Rinf" /> Cadera/glúteo der.</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Rinf" /> Muslo der.</label>
-            <label class="item"><input type="checkbox" data-wpi data-region="Rinf" /> Pierna der.</label>
-          </div>
-
-          <div class="divider"></div>
-          <div class="legend">
-            <span class="pill">WPI: suma de sitios = 0–19</span>
-            <span class="pill">Dolor generalizado: ≥4 de 5 regiones con dolor</span>
-          </div>
+          <h3>Temporalidad</h3>
+          <div class="item"><label><input type="checkbox" id="ibs-6m"> Inicio de síntomas ≥6 meses</label></div>
         </div>
 
         <div class="card">
-          <h2>2) SSS: Severidad de síntomas (0–12)</h2>
-          <div class="cols">
-            <div class="item">
-              <label>Fatiga</label>
-              <input type="range" min="0" max="3" step="1" value="0" data-sss="fatiga" oninput="updateLabels()" />
-              <div class="muted">0–3</div>
-            </div>
-            <div class="item">
-              <label>Despertar no reparador</label>
-              <input type="range" min="0" max="3" step="1" value="0" data-sss="sueño" oninput="updateLabels()" />
-              <div class="muted">0–3</div>
-            </div>
-            <div class="item">
-              <label>Síntomas cognitivos</label>
-              <input type="range" min="0" max="3" step="1" value="0" data-sss="cognitivo" oninput="updateLabels()" />
-              <div class="muted">0–3</div>
-            </div>
-          </div>
-
-          <h3>Síntomas acompañantes</h3>
-          <div class="cols">
-            <label class="item"><input type="checkbox" data-sss-extra /> Cefalea</label>
-            <label class="item"><input type="checkbox" data-sss-extra /> Dolor/cólicos en hipogastrio</label>
-            <label class="item"><input type="checkbox" data-sss-extra /> Ánimo deprimido</label>
-          </div>
-
-          <h3>Duración</h3>
-          <div class="item">
-            <label><input type="checkbox" id="fm-3m" /> Síntomas ≥ 3 meses</label>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid" style="margin-top:16px">
-        <div class="card">
-          <h2>Resultado Fibromialgia</h2>
+          <h2>Resultado SII</h2>
           <div class="cols-3">
-            <div>
-              <div class="muted">WPI</div>
-              <div class="score" id="fm-wpi">0</div>
-            </div>
-            <div>
-              <div class="muted">SSS</div>
-              <div class="score" id="fm-sss">0</div>
-            </div>
-            <div>
-              <div class="muted">Regiones con dolor</div>
-              <div class="score" id="fm-reg">0/5</div>
-            </div>
-          </div>
-          <div style="margin-top:8px">
-            <span id="fm-criteria" class="badge warn">Criterios incompletos</span>
-            <span id="fm-prob" class="badge"></span>
+            <div><div class="muted">Criterios nucleares</div><div class="score" id="ibs-core">0/2</div></div>
+            <div><div class="muted">Asociados</div><div class="score" id="ibs-assoc">0/3</div></div>
+            <div><div class="muted">Clasificación</div><div class="score" id="ibs-class">No cumple</div></div>
           </div>
           <div class="divider"></div>
-          <div id="fm-explain" class="section-help"></div>
+          <div id="ibs-explain" class="muted"></div>
         </div>
+
         <div class="card">
           <h2>Conducta sugerida</h2>
-          <ul class="list" id="fm-manejo"></ul>
-          <details>
-            <summary>Notas para APS</summary>
-            <ul class="list">
-              <li>Evaluar comorbilidades: ánimo, trastornos del sueño, dolor lumbar crónico, SII.</li>
-              <li>Evitar estudios extensos si clínica típica y examen normal.</li>
-              <li>Derivar a Reumatología cuando el diagnóstico sea dudoso, existan signos inflamatorios objetivos o impacto funcional severo refractario.</li>
-            </ul>
-          </details>
+          <ul class="list" id="ibs-manejo"></ul>
         </div>
       </div>
     </section>
 
-    <!-- AR ACR/EULAR 2010 -->
-    <section id="ra" class="tab-panel" aria-labelledby="tab-ra" hidden>
-      <div class="grid">
-        <div class="card">
-          <h2>Puntaje por categorías A–D</h2>
-          <h3>A. Compromiso articular</h3>
-          <div class="cols">
-            <label class="item"><input type="radio" name="ra-A" value="0" checked> 1 articulación grande (0)</label>
-            <label class="item"><input type="radio" name="ra-A" value="1"> 2–10 grandes (1)</label>
-            <label class="item"><input type="radio" name="ra-A" value="2"> 1–3 pequeñas ± grandes (2)</label>
-            <label class="item"><input type="radio" name="ra-A" value="3"> 4–10 pequeñas ± grandes (3)</label>
-            <label class="item"><input type="radio" name="ra-A" value="5"> &gt;10 articulaciones (≥1 pequeña) (5)</label>
-          </div>
+    <!-- SALUD MENTAL -->
+    <section id="sm" class="tab-panel" hidden>
+      <div class="subtabs">
+        <button class="subtab active" id="sub-gad" onclick="showSubSM('gad')">TAG</button>
+        <button class="subtab" id="sub-panic" onclick="showSubSM('panic')">Trastorno de Pánico</button>
+        <button class="subtab" id="sub-mdd" onclick="showSubSM('mdd')">Depresión</button>
+        <button class="subtab" id="sub-bip" onclick="showSubSM('bip')">Bipolar</button>
+        <button class="subtab" id="sub-bpd" onclick="showSubSM('bpd')">T. Personalidad Limítrofe</button>
+      </div>
 
-          <h3>B. Serología (RF/ACPA)</h3>
-          <div class="cols">
-            <label class="item"><input type="radio" name="ra-B" value="0" checked> RF− y ACPA− (0)</label>
-            <label class="item"><input type="radio" name="ra-B" value="2"> RF+ o ACPA+ bajo título (2)</label>
-            <label class="item"><input type="radio" name="ra-B" value="3"> RF+ o ACPA+ alto título (3)</label>
-          </div>
-
-          <h3>C. Reactantes de fase aguda</h3>
-          <div class="cols">
-            <label class="item"><input type="radio" name="ra-C" value="0" checked> PCR y VSG normales (0)</label>
-            <label class="item"><input type="radio" name="ra-C" value="1"> PCR o VSG anormal (1)</label>
-          </div>
-
-          <h3>D. Duración de síntomas</h3>
-          <div class="cols">
-            <label class="item"><input type="radio" name="ra-D" value="0" checked> &lt; 6 semanas (0)</label>
-            <label class="item"><input type="radio" name="ra-D" value="1"> ≥ 6 semanas (1)</label>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Resultado AR</h2>
-          <div class="cols-3">
-            <div>
-              <div class="muted">Puntaje total</div>
-              <div class="score" id="ra-total">0</div>
-            </div>
-            <div>
-              <div class="muted">Clasificación</div>
-              <div class="score" id="ra-clas">No cumple</div>
-            </div>
-            <div>
-              <div class="muted">Probabilidad</div>
-              <div class="score" id="ra-prob">Baja</div>
+      <!-- GAD -->
+      <div id="panel-gad">
+        <div class="grid">
+          <div class="card">
+            <h2>DSM‑5: Trastorno de Ansiedad Generalizada (TAG)</h2>
+            <button class="help-btn" data-help="help-gad">?</button>
+            <div class="help-pop" id="help-gad"><h4>Cómo usar</h4><p>Ansiedad excesiva la mayoría de los días ≥6 meses, difícil de controlar, con ≥3 síntomas físicos/cognitivos.</p></div>
+            <div class="item"><label><input type="checkbox" id="gad-dur"> Ansiedad y preocupación la mayoría de los días ≥6 meses</label></div>
+            <div class="item"><label><input type="checkbox" id="gad-ctrl"> Dificultad para controlar la preocupación</label></div>
+            <h3>Síntomas (marcar; se requieren ≥3)</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" class="gad-sx"> Inquietud/tensión</label>
+              <label class="item"><input type="checkbox" class="gad-sx"> Fatigabilidad</label>
+              <label class="item"><input type="checkbox" class="gad-sx"> Dificultad para concentrarse</label>
+              <label class="item"><input type="checkbox" class="gad-sx"> Irritabilidad</label>
+              <label class="item"><input type="checkbox" class="gad-sx"> Tensión muscular</label>
+              <label class="item"><input type="checkbox" class="gad-sx"> Alteración del sueño</label>
             </div>
           </div>
-          <div class="divider"></div>
-          <div id="ra-explain" class="section-help"></div>
+          <div class="card">
+            <h2>Resultado TAG</h2>
+            <div class="cols-3">
+              <div><div class="muted">Requisitos</div><div class="score" id="gad-core">0/2</div></div>
+              <div><div class="muted">Síntomas</div><div class="score" id="gad-sum">0/6</div></div>
+              <div><div class="muted">Clasificación</div><div class="score" id="gad-class">No cumple</div></div>
+            </div>
+            <div class="divider"></div>
+            <div id="gad-explain" class="muted"></div>
+          </div>
+          <div class="card">
+            <h2>Conducta sugerida</h2>
+            <ul class="list" id="gad-manejo"></ul>
+          </div>
         </div>
       </div>
 
-      <div class="grid" style="margin-top:16px">
-        <div class="card">
-          <h2>Conducta sugerida</h2>
-          <ul class="list" id="ra-manejo"></ul>
-          <details>
-            <summary>Notas clínicas</summary>
-            <ul class="list">
-              <li>Un puntaje ≥6/10 clasifica AR definida; la decisión terapéutica requiere confirmación clínica.</li>
-              <li>Si el puntaje es &lt;6 pero existe sinovitis clínica persistente, considerar reevaluación seriada y derivación.</li>
-            </ul>
-          </details>
+      <!-- PÁNICO -->
+      <div id="panel-panic" hidden>
+        <div class="grid">
+          <div class="card">
+            <h2>DSM‑5: Trastorno de Pánico</h2>
+            <button class="help-btn" data-help="help-panic">?</button>
+            <div class="help-pop" id="help-panic"><h4>Cómo usar</h4><p>Recurrentes ataques de pánico inesperados y ≥1 mes de preocupación persistente o cambio conductual desadaptativo.</p></div>
+            <div class="item"><label><input type="checkbox" id="pa-ru"> ≥2 ataques de pánico inesperados</label></div>
+            <div class="item"><label><input type="checkbox" id="pa-1m"> ≥1 mes de preocupación por nuevos ataques o conductas de evitación</label></div>
+          </div>
+          <div class="card">
+            <h2>Resultado Pánico</h2>
+            <div class="cols-3">
+              <div><div class="muted">Criterios</div><div class="score" id="pa-core">0/2</div></div>
+              <div><div class="muted">Clasificación</div><div class="score" id="pa-class">No cumple</div></div>
+              <div><div class="muted">Prioridad</div><div class="score" id="pa-prio">Baja</div></div>
+            </div>
+            <div class="divider"></div>
+            <div id="pa-explain" class="muted"></div>
+          </div>
+          <div class="card">
+            <h2>Conducta sugerida</h2>
+            <ul class="list" id="pa-manejo"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEPRESIÓN -->
+      <div id="panel-mdd" hidden>
+        <div class="grid">
+          <div class="card">
+            <h2>DSM‑5: Trastorno Depresivo Mayor (TDM)</h2>
+            <button class="help-btn" data-help="help-mdd">?</button>
+            <div class="help-pop" id="help-mdd"><h4>Cómo usar</h4><p>≥5 síntomas durante ≥2 semanas, con ánimo deprimido o anhedonia obligatorio.</p></div>
+            <div class="item"><label><input type="checkbox" id="mdd-2w"> Síntomas presentes ≥2 semanas</label></div>
+            <h3>Síntomas (marcar)</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" class="mdd-sx" data-core> Ánimo deprimido</label>
+              <label class="item"><input type="checkbox" class="mdd-sx" data-core> Anhedonia</label>
+              <label class="item"><input type="checkbox" class="mdd-sx"> Cambios ponderales/apetito</label>
+              <label class="item"><input type="checkbox" class="mdd-sx"> Insomnio o hipersomnia</label>
+              <label class="item"><input type="checkbox" class="mdd-sx"> Agitación o enlentecimiento psicomotor</label>
+              <label class="item"><input type="checkbox" class="mdd-sx"> Fatiga o pérdida de energía</label>
+              <label class="item"><input type="checkbox" class="mdd-sx"> Sentimientos de culpa/insuficiencia</label>
+              <label class="item"><input type="checkbox" class="mdd-sx"> Dificultad para concentrarse</label>
+              <label class="item"><input type="checkbox" class="mdd-sx" data-risk> Pensamientos de muerte o suicidio</label>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Resultado TDM</h2>
+            <div class="cols-3">
+              <div><div class="muted">Síntomas</div><div class="score" id="mdd-sum">0/9</div></div>
+              <div><div class="muted">Núcleo presente</div><div class="score" id="mdd-core">No</div></div>
+              <div><div class="muted">Clasificación</div><div class="score" id="mdd-class">No cumple</div></div>
+            </div>
+            <div class="divider"></div>
+            <div id="mdd-explain" class="muted"></div>
+          </div>
+          <div class="card">
+            <h2>Conducta sugerida</h2>
+            <ul class="list" id="mdd-manejo"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIPOLAR -->
+      <div id="panel-bip" hidden>
+        <div class="grid">
+          <div class="card">
+            <h2>DSM‑5: Espectro Bipolar (cribado orientativo)</h2>
+            <button class="help-btn" data-help="help-bip">?</button>
+            <div class="help-pop" id="help-bip"><h4>Cómo usar</h4><p>Manía: ≥7 días o hospitalización, ≥3 síntomas. Hipomanía: ≥4 días, ≥3 síntomas, sin deterioro grave. Bipolar I = manía; Bipolar II = hipomanía + TDM.</p></div>
+            <div class="item"><label><input type="checkbox" id="bip-elev"> Estado de ánimo elevado/irritable y aumento de energía</label></div>
+            <div class="item"><label>Duración del episodio
+              <select id="bip-dur">
+                <option value="0" selected>—</option>
+                <option value="2">≥7 días o hospitalización</option>
+                <option value="1">≥4 días</option>
+              </select>
+            </label></div>
+            <h3>Síntomas (marcar; se requieren ≥3)</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" class="bip-sx"> Autoestima elevada/grandiosidad</label>
+              <label class="item"><input type="checkbox" class="bip-sx"> Disminución de la necesidad de dormir</label>
+              <label class="item"><input type="checkbox" class="bip-sx"> Verborragia</label>
+              <label class="item"><input type="checkbox" class="bip-sx"> Fuga de ideas</label>
+              <label class="item"><input type="checkbox" class="bip-sx"> Distractibilidad</label>
+              <label class="item"><input type="checkbox" class="bip-sx"> Actividad dirigida aumentada</label>
+              <label class="item"><input type="checkbox" class="bip-sx"> Conductas de riesgo</label>
+            </div>
+            <div class="item"><label><input type="checkbox" id="bip-mddhx"> Historia de episodio depresivo mayor</label></div>
+          </div>
+          <div class="card">
+            <h2>Resultado Bipolar</h2>
+            <div class="cols-3">
+              <div><div class="muted">Síntomas manía/hipomanía</div><div class="score" id="bip-sum">0/7</div></div>
+              <div><div class="muted">Tipo sugerido</div><div class="score" id="bip-class">Indeterminado</div></div>
+              <div><div class="muted">Prioridad</div><div class="score" id="bip-prio">Baja</div></div>
+            </div>
+            <div class="divider"></div>
+            <div id="bip-explain" class="muted"></div>
+          </div>
+          <div class="card">
+            <h2>Conducta sugerida</h2>
+            <ul class="list" id="bip-manejo"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- BPD -->
+      <div id="panel-bpd" hidden>
+        <div class="grid">
+          <div class="card">
+            <h2>DSM‑5: Trastorno de Personalidad Limítrofe (BPD)</h2>
+            <button class="help-btn" data-help="help-bpd">?</button>
+            <div class="help-pop" id="help-bpd"><h4>Cómo usar</h4><p>Patrón persistente con ≥5 de 9 criterios, inicio temprano y múltiples contextos.</p></div>
+            <h3>Criterios (marcar; se requieren ≥5)</h3>
+            <div class="cols">
+              <label class="item"><input type="checkbox" class="bpd-sx"> Esfuerzos frenéticos por evitar abandono</label>
+              <label class="item"><input type="checkbox" class="bpd-sx"> Relaciones inestables e intensas</label>
+              <label class="item"><input type="checkbox" class="bpd-sx"> Alteración de identidad</label>
+              <label class="item"><input type="checkbox" class="bpd-sx"> Impulsividad en ≥2 áreas dañinas</label>
+              <label class="item"><input type="checkbox" class="bpd-sx" data-risk> Conducta/amenazas suicidas o automutilación</label>
+              <label class="item"><input type="checkbox" class="bpd-sx"> Afecto muy reactivo</label>
+              <label class="item"><input type="checkbox" class="bpd-sx"> Sentimientos crónicos de vacío</label>
+              <label class="item"><input type="checkbox" class="bpd-sx"> Ira inapropiada</label>
+              <label class="item"><input type="checkbox" class="bpd-sx"> Ideación paranoide/disociación transitoria</label>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Resultado BPD</h2>
+            <div class="cols-3">
+              <div><div class="muted">Criterios</div><div class="score" id="bpd-sum">0/9</div></div>
+              <div><div class="muted">Clasificación</div><div class="score" id="bpd-class">No cumple</div></div>
+              <div><div class="muted">Prioridad</div><div class="score" id="bpd-prio">Baja</div></div>
+            </div>
+            <div class="divider"></div>
+            <div id="bpd-explain" class="muted"></div>
+          </div>
+          <div class="card">
+            <h2>Conducta sugerida</h2>
+            <ul class="list" id="bpd-manejo"></ul>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="foot">
-      <div><strong>Uso:</strong> herramienta educativa y de apoyo a la decisión en APS. No reemplaza juicio clínico ni examen físico. Evitar automatizar prescripción farmacológica desde aquí.</div>
-      <div style="margin-top:8px">
-        <strong>Fuentes:</strong> Criterios diagnósticos de Fibromialgia 2016 (WPI/SSS) y Criterios de clasificación de AR ACR/EULAR 2010. Consulte literatura vigente para matices clínicos.
-      </div>
-    </section>
+    <footer>
+      <div><strong>Uso:</strong> herramienta educativa y de apoyo a la decisión en APS. No reemplaza juicio clínico ni examen físico. No genera indicaciones farmacológicas.</div>
+      <div style="margin-top:8px"><strong>Fuentes:</strong> ACR/EULAR 2010 AR; Criterios Fibromialgia 2016 (WPI/SSS); ROMA IV SII; DSM‑5 (TAG, Trastorno de Pánico, TDM, Bipolar, T. Personalidad Limítrofe).</div>
+      <div style="margin-top:12px"><strong>Crédito:</strong> Creado con asistencia de IA. Diseñado por Diego Ortega Araya, Médico, CESFAM Dr. CDG, San Javier, Chile.</div>
+    </footer>
   </div>
 
 <script>
-  // Tab logic
-  function showTab(key){
-    const ids=["fm","ra"]; ids.forEach(id=>{document.getElementById(id).hidden = id!==key});
-    document.querySelectorAll('.tab').forEach(btn=>btn.classList.remove('active'));
-    document.getElementById('tab-'+key).classList.add('active');
+  // Navegación tabs principales
+  function showTab(id){
+    const ids=['reuma','gi','sm'];
+    ids.forEach(x=>{document.getElementById(x).hidden = x!==id});
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.getElementById('tab-'+(id==='reuma'?'reuma':id)).classList.add('active');
+    updateAll();
+  }
+  // Subtabs Reuma
+  function showSub(id){
+    const ids=['fm','ra'];
+    document.getElementById('panel-fm').hidden = id!=='fm';
+    document.getElementById('panel-ra').hidden = id!=='ra';
+    document.getElementById('sub-fm').classList.toggle('active', id==='fm');
+    document.getElementById('sub-ra').classList.toggle('active', id==='ra');
+    updateAll();
+  }
+  // Subtabs Salud Mental
+  function showSubSM(id){
+    const ids=['gad','panic','mdd','bip','bpd'];
+    ids.forEach(x=>{document.getElementById('panel-'+x).hidden = x!==id});
+    ['gad','panic','mdd','bip','bpd'].forEach(x=>document.getElementById('sub-'+x).classList.toggle('active', x===id));
     updateAll();
   }
 
-  // Fibromialgia calculators
+  // Popovers ayuda
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.help-btn');
+    if(btn){
+      const id = btn.getAttribute('data-help');
+      const pop = document.getElementById(id);
+      document.querySelectorAll('.help-pop').forEach(p=>{ if(p!==pop) p.classList.remove('visible'); });
+      if(pop) pop.classList.toggle('visible');
+    } else if(!e.target.closest('.help-pop')) {
+      document.querySelectorAll('.help-pop').forEach(p=>p.classList.remove('visible'));
+    }
+  });
+
+  // ===== Fibromialgia =====
   const fm = {
     wpiSites: Array.from(document.querySelectorAll('[data-wpi]')),
-    sssSliders: Array.from(document.querySelectorAll('[data-sss]')),
     sssExtras: Array.from(document.querySelectorAll('[data-sss-extra]')),
     threeMonths: document.getElementById('fm-3m')
   };
-
   function computeFM(){
-    // WPI count
+    // WPI
     const wpi = fm.wpiSites.filter(x=>x.checked).length;
-
-    // Regions: Lsup, Rsup, Linf, Rinf, axial; exclude items with data-omit-region
     const regionSet = new Set();
-    fm.wpiSites.forEach(x=>{
-      const omit = x.hasAttribute('data-omit-region');
-      const r = x.getAttribute('data-region');
-      if(x.checked && r && !omit){ regionSet.add(r); }
-    });
+    fm.wpiSites.forEach(x=>{ const omit=x.hasAttribute('data-omit-region'); const r=x.getAttribute('data-region'); if(x.checked && r && !omit){regionSet.add(r);} });
     const regions = regionSet.size; // 0-5
-
     // SSS
-    let sssCore = fm.sssSliders.reduce((a,x)=>a + Number(x.value), 0); // 0-9
-    let sssExtra = fm.sssExtras.filter(x=>x.checked).length; // 0-3
-    if(sssExtra>3) sssExtra=3; // cap
-    const sss = sssCore + sssExtra; // 0-12
-
-    // Criteria
+    const getVal = (name)=> Number((document.querySelector(`input[name=\"sss-${'fatiga'===name?'fatiga':name}\"]:checked`)||{value:0}).value);
+    const sssCore = ['fatiga','sueño','cognitivo'].reduce((a,k)=> a + Number((document.querySelector(`input[name=\\\"sss-${k}\\\"]:checked`)||{value:0}).value), 0);
+    let sssExtra = fm.sssExtras.filter(x=>x.checked).length; if(sssExtra>3) sssExtra=3; const sss = sssCore + sssExtra;
+    // Criterios
     const crit1 = (wpi>=7 && sss>=5) || (wpi>=4 && wpi<=6 && sss>=9);
-    const crit2 = regions>=4; // generalized pain in 4/5 regions
-    const crit3 = fm.threeMonths.checked;
-    const meets = crit1 && crit2 && crit3;
-
-    // Probability labeling (heuristic for UI only)
-    let probTxt = 'Baja'; let badge='warn';
-    if(meets){ probTxt='Alta'; badge='ok'; }
-    else if(crit1 || crit2 || crit3){ probTxt='Intermedia'; badge='warn'; }
-    else { probTxt='Baja'; badge='bad'; }
-
-    // Update UI
-    document.getElementById('fm-wpi').textContent = wpi;
-    document.getElementById('fm-sss').textContent = sss;
-    document.getElementById('fm-reg').textContent = regions + '/5';
-
-    const critEl = document.getElementById('fm-criteria');
-    critEl.textContent = meets ? 'Cumple criterios diagnósticos' : 'Criterios incompletos';
-    critEl.className = 'badge ' + (meets ? 'ok' : 'warn');
-
-    const probEl = document.getElementById('fm-prob');
-    probEl.textContent = 'Probabilidad: ' + probTxt;
-    probEl.className = 'badge ' + (probTxt==='Alta'?'ok':probTxt==='Intermedia'?'warn':'bad');
-
-    const explain = document.getElementById('fm-explain');
-    explain.innerHTML =
-      `<strong>Regla:</strong> WPI ≥ 7 y SSS ≥ 5, o WPI 4–6 y SSS ≥ 9; además dolor generalizado en ≥4/5 regiones y síntomas ≥3 meses.`;
-
-    // Management suggestions for primary care
-    const manejo = document.getElementById('fm-manejo');
-    manejo.innerHTML = '';
-    const li = (t)=>{const el=document.createElement('li'); el.textContent=t; manejo.appendChild(el);};
+    const crit2 = regions>=4; const crit3 = fm.threeMonths.checked; const meets = crit1 && crit2 && crit3;
+    // UI
+    document.getElementById('fm-wpi').textContent=wpi; document.getElementById('fm-sss').textContent=sss; document.getElementById('fm-reg').textContent=regions+'/5';
+    const critEl=document.getElementById('fm-criteria'); critEl.textContent=meets?'Cumple criterios diagnósticos':'Criterios incompletos'; critEl.className='badge '+(meets?'ok':'warn');
+    const probEl=document.getElementById('fm-prob'); const probTxt=meets?'Alta':(crit1||crit2||crit3)?'Intermedia':'Baja'; probEl.textContent='Probabilidad: '+probTxt; probEl.className='badge '+(probTxt==='Alta'?'ok':probTxt==='Intermedia'?'warn':'bad');
+    document.getElementById('fm-explain').textContent='Regla: WPI ≥7 y SSS ≥5, o WPI 4–6 y SSS ≥9; además dolor generalizado en ≥4/5 regiones y síntomas ≥3 meses.';
+    // Manejo
+    const m=document.getElementById('fm-manejo'); m.innerHTML='';
+    const li=t=>{const el=document.createElement('li'); el.textContent=t; m.appendChild(el);};
     if(meets){
-      li('Educar en dolor crónico central: validar síntomas y explicar fisiopatología no inflamatoria.');
-      li('Indicar actividad física progresiva: aeróbico + fortalecimiento 2–3 veces/semana.');
-      li('Higiene del sueño y regularidad del ritmo circadiano.');
-      li('Considerar terapia psicológica con enfoque cognitivo-conductual según disponibilidad.');
-      li('Cribar y tratar comorbilidades: ánimo, sueño, SII, cefalea.');
-      li('Derivar a Reumatología si diagnóstico atípico, signos objetivos inflamatorios o discapacidad marcada persistente.');
-    } else if(crit1 || crit2) {
-      li('Re-evaluar en 4–8 semanas con énfasis en actividad física y sueño.');
-      li('Completar anamnesis dirigida y examen físico para descartar patología inflamatoria.');
-      li('Derivar si aparecen sinovitis objetiva, rigidez matinal prolongada o elevación de reactantes.');
-    } else {
-      li('Fomentar ejercicio y hábitos de sueño.');
-      li('Seguimiento clínico si persisten síntomas.');
-    }
+      li('Educar en dolor crónico central.');
+      li('Actividad física progresiva 2–3 veces/semana.');
+      li('Higiene del sueño.');
+      li('Terapia psicológica (TCC) según acceso.');
+      li('Cribar ánimo/sueño/SII/cefalea.');
+      li('Derivar a Reumatología si dudas diagnósticas o discapacidad marcada.');
+    } else if(crit1||crit2){
+      li('Reevaluar en 4–8 semanas.'); li('Descartar signos inflamatorios.'); li('Derivar si aparece sinovitis o elevación de reactantes.');
+    } else { li('Promover ejercicio y hábitos de sueño.'); }
   }
-
   fm.wpiSites.forEach(x=>x.addEventListener('change', computeFM));
-  fm.sssSliders.forEach(x=>x.addEventListener('change', computeFM));
+  document.querySelectorAll('input[name^=\"sss-\"]').forEach(x=>x.addEventListener('change', computeFM));
   fm.sssExtras.forEach(x=>x.addEventListener('change', computeFM));
   fm.threeMonths.addEventListener('change', computeFM);
 
-  function updateLabels(){ /* reserved for live slider labels if needed */ }
-
-  // RA calculator
-  const raInputs = Array.from(document.querySelectorAll('input[name^="ra-"]'));
+  // ===== AR =====
   function computeRA(){
-    const A = Number(document.querySelector('input[name="ra-A"]:checked').value);
-    const B = Number(document.querySelector('input[name="ra-B"]:checked').value);
-    const C = Number(document.querySelector('input[name="ra-C"]:checked').value);
-    const D = Number(document.querySelector('input[name="ra-D"]:checked').value);
-    const total = A+B+C+D;
-
-    const clas = total>=6 ? 'AR definida (clasificación)' : 'No cumple';
-    let prob='Baja';
-    if(total>=6) prob='Alta'; else if(total>=3) prob='Intermedia';
-
-    document.getElementById('ra-total').textContent = total;
-    document.getElementById('ra-clas').textContent = clas;
-    document.getElementById('ra-prob').textContent = prob;
-
-    const explain=document.getElementById('ra-explain');
-    explain.innerHTML = `<strong>Regla:</strong> Sumar A–D. Puntaje ≥6/10 clasifica como AR. La probabilidad mostrada es orientativa y no reemplaza el juicio clínico.`;
-
-    const manejo=document.getElementById('ra-manejo'); manejo.innerHTML='';
-    const li=(t)=>{const el=document.createElement('li'); el.textContent=t; manejo.appendChild(el);};
-    if(total>=6){
-      li('Derivación precoz a Reumatología para confirmación diagnóstica y planificación terapéutica.');
-      li('Solicitar hemograma, perfil hepatorrenal, PCR/VSG, función tiroidea si clínicamente pertinente.');
-      li('Imagen: radiografía de manos y pies de base o ecografía articular si disponible.');
-      li('Educar en autocuidado articular y promover ejercicio de bajo impacto.');
-    } else if(total>=3){
-      li('Reevaluación seriada: buscar sinovitis objetiva y seguimiento de rigidez matinal y dolor inflamatorio.');
-      li('Completar serologías (RF/ACPA) si faltan y reactantes de fase aguda.');
-      li('Considerar derivación si clínica sugiere progresión o compromiso funcional.');
-    } else {
-      li('Manejo sintomático no farmacológico y vigilancia clínica.');
-      li('Si aparece tumefacción articular o signos inflamatorios, reevaluar criterios.');
-    }
+    const A=Number(document.querySelector('input[name=\"ra-A\"]:checked').value);
+    const B=Number(document.querySelector('input[name=\"ra-B\"]:checked').value);
+    const C=Number(document.querySelector('input[name=\"ra-C\"]:checked').value);
+    const D=Number(document.querySelector('input[name=\"ra-D\"]:checked').value);
+    const total=A+B+C+D; const clas= total>=6?'AR definida (clasificación)':'No cumple'; const prob= total>=6?'Alta': total>=3?'Intermedia':'Baja';
+    document.getElementById('ra-total').textContent=total; document.getElementById('ra-clas').textContent=clas; document.getElementById('ra-prob').textContent=prob; document.getElementById('ra-explain').textContent='Sume A–D. Puntaje ≥6/10 clasifica AR. La decisión terapéutica requiere confirmación clínica.';
+    const m=document.getElementById('ra-manejo'); m.innerHTML=''; const li=t=>{const el=document.createElement('li'); el.textContent=t; m.appendChild(el);};
+    if(total>=6){ li('Derivación precoz a Reumatología.'); li('Solicitar laboratorio básico y PCR/VSG.'); li('Imágenes de base: manos y pies o ecografía si disponible.'); }
+    else if(total>=3){ li('Reevaluación seriada.'); li('Completar serologías RF/ACPA y reactantes si faltan.'); li('Derivar si progresión o compromiso funcional.'); }
+    else { li('Manejo no farmacológico y vigilancia clínica.'); }
   }
-  raInputs.forEach(x=>x.addEventListener('change', computeRA));
+  document.querySelectorAll('input[name^=\"ra-\"]').forEach(x=>x.addEventListener('change', computeRA));
 
-  function updateAll(){ computeFM(); computeRA(); }
-  updateAll();
+  // ===== ROMA IV IBS =====
+  const ibs = { pain: document.getElementById('ibs-pain'), sixm: document.getElementById('ibs-6m'), assoc: Array.from(document.querySelectorAll('.ibs-assoc')) };
+  function computeIBS(){
+    const core = (ibs.pain.checked?1:0) + (ibs.sixm.checked?1:0);
+    const assoc = ibs.assoc.filter(x=>x.checked).length;
+    const meets = ibs.pain.checked && ibs.sixm.checked && assoc>=2;
+    document.getElementById('ibs-core').textContent=core+'/2'; document.getElementById('ibs-assoc').textContent=assoc+'/3'; document.getElementById('ibs-class').textContent=meets?'Compatible con SII':'No cumple';
+    document.getElementById('ibs-explain').textContent='Requiere dolor abdominal ≥1 día/semana en 3 meses, inicio ≥6 meses y ≥2 asociaciones.';
+    const m=document.getElementById('ibs-manejo'); m.innerHTML=''; const li=t=>{const el=document.createElement('li'); el.textContent=t; m.appendChild(el);};
+    if(meets){ li('Educación sobre SII, relación cerebro-intestino.'); li('Diario de síntomas y gatillantes; considerar dieta baja en FODMAP con guía.'); li('Ejercicio regular y manejo del estrés.'); li('Derivar a Gastroenterología si signos de alarma, baja de peso, sangrado, anemia o edad de inicio atípica.'); }
+    else { li('Reforzar hábitos saludables y reevaluación.'); }
+  }
+  [ibs.pain, ibs.sixm, ...ibs.assoc].forEach(x=>x.addEventListener('change', computeIBS));
+
+  // ===== GAD =====
+  const gad = { dur:document.getElementById('gad-dur'), ctrl:document.getElementById('gad-ctrl'), sx:Array.from(document.querySelectorAll('.gad-sx')) };
+  function computeGAD(){
+    const core = (gad.dur.checked?1:0) + (gad.ctrl.checked?1:0);
+    const sum = gad.sx.filter(x=>x.checked).length; const meets = gad.dur.checked && gad.ctrl.checked && sum>=3;
+    document.getElementById('gad-core').textContent=core+'/2'; document.getElementById('gad-sum').textContent=sum+'/6'; document.getElementById('gad-class').textContent=meets?'Compatible con TAG':'No cumple';
+    document.getElementById('gad-explain').textContent='Requiere duración ≥6 meses, dificultad para controlar y ≥3 síntomas.';
+    const m=document.getElementById('gad-manejo'); m.innerHTML=''; const li=t=>{const el=document.createElement('li'); el.textContent=t; m.appendChild(el);};
+    if(meets){ li('Psychoeducación y técnicas de respiración.'); li('Derivar a Salud Mental/psicoterapia (TCC).'); li('Evaluar comorbilidades médicas y consumo de sustancias.'); }
+    else { li('Consejería breve, estrategias de manejo del estrés y seguimiento.'); }
+  }
+  [gad.dur, gad.ctrl, ...gad.sx].forEach(x=>x.addEventListener('change', computeGAD));
+
+  // ===== PANIC =====
+  const pa = { ru:document.getElementById('pa-ru'), m1:document.getElementById('pa-1m') };
+  function computePA(){
+    const core=(pa.ru.checked?1:0)+(pa.m1.checked?1:0); const meets= pa.ru.checked && pa.m1.checked;
+    document.getElementById('pa-core').textContent=core+'/2'; document.getElementById('pa-class').textContent=meets?'Compatible con Tr. de Pánico':'No cumple';
+    document.getElementById('pa-prio').textContent=meets?'Media':'Baja';
+    document.getElementById('pa-explain').textContent='Requiere ataques inesperados recurrentes y ≥1 mes de preocupación o conductas de evitación.';
+    const m=document.getElementById('pa-manejo'); m.innerHTML=''; const li=t=>{const el=document.createElement('li'); el.textContent=t; m.appendChild(el);};
+    if(meets){ li('Psicoeducación sobre ataques de pánico.'); li('Técnicas de respiración y exposición interoceptiva con guía.'); li('Derivar a Salud Mental si interfiere con función o hay comorbilidades.'); }
+    else { li('Monitoreo y educación; enseñar respiración diafragmática.'); }
+  }
+  [pa.ru, pa.m1].forEach(x=>x.addEventListener('change', computePA));
+
+  // ===== MDD =====
+  const mdd = { dur:document.getElementById('mdd-2w'), sx:Array.from(document.querySelectorAll('.mdd-sx')) };
+  function computeMDD(){
+    const sum = mdd.sx.filter(x=>x.checked).length; const core = mdd.sx.filter(x=>x.checked && x.hasAttribute('data-core')).length>0; const meets = mdd.dur.checked && core && sum>=5;
+    document.getElementById('mdd-sum').textContent=sum+'/9'; document.getElementById('mdd-core').textContent=core?'Sí':'No'; document.getElementById('mdd-class').textContent=meets?'Compatible con TDM':'No cumple';
+    document.getElementById('mdd-explain').textContent='Requiere ≥5 síntomas por ≥2 semanas, con ánimo deprimido o anhedonia.';
+    const m=document.getElementById('mdd-manejo'); m.innerHTML=''; const li=t=>{const el=document.createElement('li'); el.textContent=t; m.appendChild(el);};
+    if(mdd.sx.some(x=>x.checked && x.hasAttribute('data-risk'))) { li('Evaluar riesgo suicida y seguridad. Considerar derivación urgente si riesgo alto.'); }
+    if(meets){ li('Psicoeducación y activación conductual.'); li('Derivar a Salud Mental para psicoterapia; coordinar plan de seguridad si corresponde.'); }
+    else { li('Seguimiento, promover sueño, actividad física y soporte psicosocial.'); }
+  }
+  [mdd.dur, ...mdd.sx].forEach(x=>x.addEventListener('change', computeMDD));
+
+  // ===== BIPOLAR =====
+  const bip = { elev:document.getElementById('bip-elev'), dur:document.getElementById('bip-dur'), sx:Array.from(document.querySelectorAll('.bip-sx')), mddhx:document.getElementById('bip-mddhx') };
+  function computeBIP(){
+    const sum=bip.sx.filter(x=>x.checked).length; const elev=bip.elev.checked; const dur=Number(bip.dur.value); const has3=sum>=3;
+    let clas='Indeterminado'; let prio='Baja';
+    if(elev && dur===2 && has3){ clas='Sugerente de Bipolar I (manía)'; prio='Alta'; }
+    else if(elev && dur===1 && has3 && bip.mddhx.checked){ clas='Sugerente de Bipolar II (hipomanía + TDM)'; prio='Media'; }
+    else if(elev && has3){ clas='Episodio subumbral'; prio='Media'; }
+    document.getElementById('bip-sum').textContent=sum+'/7'; document.getElementById('bip-class').textContent=clas; document.getElementById('bip-prio').textContent=prio;
+    document.getElementById('bip-explain').textContent='Orientativo. Confirmación requiere evaluación especializada y descartar sustancias/condiciones médicas.';
+    const m=document.getElementById('bip-manejo'); m.innerHTML=''; const li=t=>{const el=document.createElement('li'); el.textContent=t; m.appendChild(el);};
+    if(prio==='Alta'||prio==='Media'){ li('Derivación prioritaria a Psiquiatría.'); li('Evaluar riesgos, psicoeducación y evitar privación de sueño.'); }
+    else { li('Monitoreo clínico y educación.'); }
+  }
+  [bip.elev, bip.dur, bip.mddhx, ...bip.sx].forEach(x=>x.addEventListener('change', computeBIP));
+
+  // ===== BPD =====
+  const bpd = { sx:Array.from(document.querySelectorAll('.bpd-sx')) };
+  function computeBPD(){
+    const sum=bpd.sx.filter(x=>x.checked).length; const meets=sum>=5; document.getElementById('bpd-sum').textContent=sum+'/9'; document.getElementById('bpd-class').textContent=meets?'Compatible con BPD':'No cumple'; document.getElementById('bpd-prio').textContent= (meets?'Media':'Baja');
+    document.getElementById('bpd-explain').textContent='Requiere ≥5 criterios, patrón persistente, inicio temprano y múltiples contextos.';
+    const m=document.getElementById('bpd-manejo'); m.innerHTML=''; const li=t=>{const el=document.createElement('li'); el.textContent=t; m.appendChild(el);};
+    if(bpd.sx.some(x=>x.checked && x.hasAttribute('data-risk'))) { li('Evaluar riesgo suicida/autoagresión y plan de seguridad.'); }
+    if(meets){ li('Derivar a psicoterapia estructurada (p. ej., DBT) si disponible.'); li('Coordinación con red de apoyo y APS.'); }
+    else { li('Psicoeducación y continuidad de cuidados.'); }
+  }
+  bpd.sx.forEach(x=>x.addEventListener('change', computeBPD));
+
+  function updateAll(){ computeFM(); computeRA(); computeIBS(); computeGAD(); computePA(); computeMDD(); computeBIP(); computeBPD(); }
+  // Inicialización
+  showTab('reuma'); showSub('fm'); showSubSM('gad'); updateAll();
 </script>
 </body>
 </html>
